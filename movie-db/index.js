@@ -8,6 +8,9 @@ import { fileURLToPath } from "url";
 const app = express();
 const logStream = createWriteStream("access.log", { flags: "a" });
 
+app.set("view engine", "pug");
+
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(`${dirname(fileURLToPath(import.meta.url))}/public`));
 app.use(morgan("common", { immediate: true, stream: logStream }));
 
