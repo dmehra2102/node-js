@@ -2,7 +2,10 @@ import data from "./data.js";
 import { createServer } from "http";
 import { getList } from "./list.js";
 import { getForm } from "./form.js";
+import { parse } from "querystring";
+import { saveAddress } from "./save.js";
 import { deleteAddress } from "./delete.js";
+import { readFile } from "fs";
 
 const server = createServer((request, response) => {
   const parts = request.url.split("/").filter((item) => item != "");
@@ -14,6 +17,26 @@ const server = createServer((request, response) => {
     send(response, getForm());
   } else if (parts.includes("edit")) {
     send(response, getForm(data.addresses, parts[1]));
+  } else if (parts.includes("save") && request.method === "POST") {
+    let body = "";
+    request.on("readable", () => {
+      const data = request.read();
+      body += data || "";
+    });
+    request.on("end", () => {
+      const address = parse(body);
+      data.addresses = saveAddress(data.addresses, address);
+      redirect(response, "/");
+    });
+  } else if (request.url === "/style.css") {
+    readFile("public/style.css", "utf8", (err, data) => {
+      if (err) {
+        response.statusCode = 404;
+        response.end();
+      } else {
+        response.end(data);
+      }
+    });
   } else {
     send(response, getList(data.addresses));
   }
