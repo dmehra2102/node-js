@@ -1,9 +1,15 @@
-import { createServer } from "http";
+import { readFileSync } from "fs";
+import { createServer } from "https";
 
-const server = createServer((request, response) => {
+const options = {
+  key: readFileSync("./localhost.key"),
+  cert: readFileSync("./localhost.cert"),
+};
+
+const server = createServer(options, (request, response) => {
   response.writeHead(200, { "content-type": "text/html; charset=utf-8" });
 
-  const url = new URL(request.url, "http://localhost:8080");
+  const url = new URL(request.url, "https://localhost:8080");
   const body = `
   <!DOCTYPE html>
     <html>
