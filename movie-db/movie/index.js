@@ -10,7 +10,8 @@ const router = Router();
 
 router.get("/", listAction);
 router.post("/save", saveAction);
-router.get("/form/:id?", formAction);
-router.delete("/delete.:id", removeAction);
+router.get("/form", formAction);
+router.get("/form/:id", formAction);
+router.delete("/delete/:id", removeAction);
 
 export { router };
