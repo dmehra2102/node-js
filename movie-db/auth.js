@@ -36,4 +36,13 @@ export default function (app) {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Creating Route for login into the apppliction
+  app.post(
+    "/login",
+    passport.authenticate("local", { failureRedirect: "/login.html" }),
+    (request, response) => {
+      response.redirect("/");
+    }
+  );
 }

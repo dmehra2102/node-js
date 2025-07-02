@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { createWriteStream } from "fs";
 import { engine as expressHandlebars } from "express-handlebars";
 import { router as movieRouter } from "./movie/index.js";
+import auth from "./auth.js";
 
 const app = express();
 const logStream = createWriteStream("access.log", { flags: "a" });
@@ -21,6 +22,8 @@ app.set("views", [`${dirname(fileURLToPath(import.meta.url))}/movie/views`]);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(`${dirname(fileURLToPath(import.meta.url))}/public`));
 app.use(morgan("common", { immediate: true, stream: logStream }));
+
+auth(app);
 
 app.use("/movie", movieRouter);
 app.get("/", (request, response) => response.redirect("/movie"));
