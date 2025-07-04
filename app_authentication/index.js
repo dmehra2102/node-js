@@ -1,5 +1,6 @@
-const express = require("express");
-const loginFormVars = require("./form-data");
+import express from "express";
+import loginFormVars from "./form-data.js";
+
 const PORT = 3000;
 const users = {};
 const app = express();
