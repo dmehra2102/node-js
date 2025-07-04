@@ -16,6 +16,20 @@ router.get("/", (request, response) => {
   response.render("index", formVars);
 });
 
+router.post("/account", async (request, response) => {
+  const { username, password } = request.body;
+  users[username] = password;
+  response.json({ message: "Account created" });
+});
+
+router.post("/auth", async (request, response) => {
+  const { username, password } = request.body;
+  if (users[username] && users[username] === password) {
+    return response.json({ message: "Logged in" });
+  }
+  response.redirect("/?page=login");
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on PORT : ${PORT}`);
 });
