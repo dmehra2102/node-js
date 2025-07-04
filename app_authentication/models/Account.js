@@ -1,7 +1,10 @@
 import db from "../dbConfig.js";
+import jwt from "jsonwebtoken";
+import passport from "passport";
 import crypto, { hash } from "node:crypto";
 import { Model, STRING, TEXT } from "sequelize";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
 
 class Account extends Model {
   static async findByUsername(username) {
@@ -75,6 +78,33 @@ class Account extends Model {
 
   static genStrategy() {
     return new LocalStrategy(this.passwordAuthenticate());
+  }
+
+  static genJWTStrategy() {
+    return new JWTStrategy(
+      {
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: "SECRET_KEY",
+      },
+
+      async (jwtPayload, done) => {
+        try {
+          const account = await this.findByUsername(jwtPayload.username);
+
+          if (account) {
+            return done(null, account);
+          }
+          return done(null, false, { message: "User not found" });
+        } catch (e) {
+          throw new Error("Unable to authenticate API account.");
+        }
+      }
+    );
+  }
+
+  signJWT() {
+    const { username } = this;
+    return jwt.sign({ username }, "SECRET_KEY");
   }
 }
 

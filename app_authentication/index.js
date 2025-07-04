@@ -24,9 +24,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(router);
 
+passport.use("jwt", Account.genJWTStrategy());
+passport.use("local", Account.genStrategy());
 passport.serializeUser(Account.serializeUser);
 passport.deserializeUser(Account.deserializeUser());
-passport.use("local", Account.genStrategy());
 
 router.get("/", (request, response) => {
   const { page } = request.query;
@@ -55,6 +56,25 @@ router.post(
       user: { username },
     } = request;
     response.json({ message: "Logged in.", username });
+  }
+);
+
+router.post(
+  "/api/auth",
+  passport.authenticate("local"),
+  async (request, response) => {
+    const { user: account } = request;
+    const token = await account.signJWT();
+    response.json(token);
+  }
+);
+
+router.get(
+  "/api/test",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    res.json({ status: "Authenticated." });
+    7;
   }
 );
 
