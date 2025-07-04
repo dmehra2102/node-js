@@ -15,4 +15,4 @@ const loginFormVars = {
   },
 };
 
-module.exports = loginFormVars;
+export default loginFormVars;

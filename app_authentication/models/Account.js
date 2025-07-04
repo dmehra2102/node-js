@@ -10,7 +10,7 @@ class Account extends Model {
   }
 
   static async register(username, password) {
-    const exisitingAccount = this.findByUsername(username);
+    const exisitingAccount = await this.findByUsername(username);
     if (exisitingAccount) {
       throw new Error("Account already exists");
     }
@@ -20,15 +20,16 @@ class Account extends Model {
   }
 
   setPassword(password) {
-    if (!passsword) throw new Error("No password supplied.");
+    if (!password) throw new Error("No password supplied.");
 
-    return new Promise((resolce, reject) => {
+    return new Promise((resolve, reject) => {
       try {
         const bufferBytes = crypto.randomBytes(32);
         const salt = bufferBytes.toString("hex");
         const hashRaw = crypto.pbkdf2Sync(password, salt, 12000, 512, "sha1");
         this.set("hash", Buffer.from(hashRaw).toString("hex"));
         this.set("salt", salt);
+        resolve();
       } catch (error) {
         reject(new Error("Unable to hash password"));
       }
@@ -65,9 +66,11 @@ class Account extends Model {
     done(null, username);
   }
 
-  static async deserializeUser(username, done) {
-    const foundAccount = await this.findByUsername(username);
-    done(null, foundAccount);
+  static deserializeUser() {
+    return async (username, done) => {
+      const foundAccount = await this.findByUsername(username);
+      done(null, foundAccount);
+    };
   }
 
   static genStrategy() {
