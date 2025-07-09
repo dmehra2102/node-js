@@ -39,3 +39,10 @@ const verifyToken = (token: string): JWTPayload => {
 const verifyRefreshToken = (token: string): JWTPayload => {
   return jwt.verify(token, REFRESH_TOKEN_SECRET) as JWTPayload;
 };
+
+export {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyToken,
+  verifyRefreshToken,
+};
