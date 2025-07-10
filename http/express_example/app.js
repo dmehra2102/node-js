@@ -31,6 +31,14 @@ app.use(
   })
 );
 
+const errorHandler = (error, request, response, next) => {
+  console.log(`error ${error.message}`);
+  const status = error.status || 400;
+  response.status(status).send(error.message);
+};
+
+app.use(errorHandler);
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/v1/welcome", (req, res) => {
@@ -42,6 +50,19 @@ app.get("/v1/sample/xml", (req, res) => {
 });
 app.get("/v1/sample", (req, res) => {
   res.send(req.body);
+});
+
+app.get("/v1/users", async (request, response, next) => {
+  try {
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject("Somehting goes very very wrong.....");
+      }, 2_000);
+    });
+    response.send({ message: "Hello Users" });
+  } catch (error) {
+    next(error); // calling next error handling middleware
+  }
 });
 
 app.post(
