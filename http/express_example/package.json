@@ -12,8 +12,10 @@
   "dependencies": {
     "body-parser": "^2.2.0",
     "express": "^5.1.0",
+    "express-mung": "^0.5.1",
     "express-validator": "^7.2.1",
     "swagger-ui-express": "^5.0.1",
+    "xml2js": "^0.6.2",
     "yamljs": "^0.3.0"
   }
 }
