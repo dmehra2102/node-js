@@ -10,7 +10,7 @@ const PORT = process.env.PORT;
 const HOST = process.env.HOST;
 
 app.use(express.json());
-aap.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/employee", employeeRouter);
 

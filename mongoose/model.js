@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 const employeeSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
-    firstName: { type: Date, required: true },
+    firstName: { type: String, required: true },
     lastName: { type: String, default: "" },
     phone: String,
     dob: String,

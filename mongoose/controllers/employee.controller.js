@@ -1,4 +1,4 @@
-import { EmployeeModel } from "../model";
+import { EmployeeModel } from "../model.js";
 
 class EmployeeController {
   static findAll = async (req, res, next) => {
