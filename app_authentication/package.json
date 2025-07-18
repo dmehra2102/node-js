@@ -11,9 +11,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "compression": "^1.8.0",
+    "compression": "^1.8.1",
     "express": "^5.1.0",
-    "express-session": "^1.18.1",
+    "express-session": "^1.18.2",
     "hbs": "^4.2.0",
     "helmet": "^8.1.0",
     "hpp": "^0.2.3",
